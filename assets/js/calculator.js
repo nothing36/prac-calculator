@@ -37,7 +37,9 @@ function operate(operator, num1, num2) {
 }
 
 // UI
-let currExpression = []
+let priorNumber
+let displayNumber
+let currOperator
 const operators = ["*", "/", "+", "-"]
 const display = document.querySelector(".display")
 const buttonContainer = document.querySelector(".buttons")
@@ -45,23 +47,52 @@ buttonContainer.addEventListener("click", handleClick);
 
 // capture button press
 function handleClick(event) {
-    if (currExpression.length == 0 && event.target.classList.contains('operator')) { return }   // stop black oper input
-    if (operators.includes(currExpression[currExpression.length - 1]) && event.target.classList.contains('operator')) { return }   // stop double oper input
+    const target = event.target;
 
-    // handle clear, equal and other button press
-    if (event.target.id == "btn-clear") {
-        currExpression = []
-    } else if (event.target.id == "btn-equals") {
-        evaluateExpression()
-    } else {
-        addToExpression(event.target.textContent)
+    if (target.id === "btn-clear") {
+        priorNumber = null;
+        displayNumber = null;
+        currOperator = null;
+        display.textContent = "";
+        return;
     }
 
-    // update the display
-    display.textContent = currExpression.join(" ")
+    if (target.id === "btn-equals") {
+        if (priorNumber !== null && currOperator && displayNumber !== null) {
+            displayNumber = operate(currOperator, priorNumber, displayNumber);
+            priorNumber = null;
+            currOperator = null;
+            display.textContent = displayNumber;
+        }
+        return;
+    }
+
+    if (target.classList.contains("operator")) {
+        if (displayNumber === null) return;
+
+        if (priorNumber === null) {
+            priorNumber = displayNumber;
+        } else if (currOperator) {
+            priorNumber = operate(currOperator, priorNumber, displayNumber);
+        }
+
+        currOperator = target.textContent;
+        display.textContent = displayNumber;
+        displayNumber = null;
+        return;
+    }
+
+    // default number input case
+    appendNumber(event);
+    display.textContent = displayNumber;
 }
 
-// add next part to on screen equation calc
-function addToExpression(char) {
-    currExpression.push(char)
+
+// build out user's number
+function appendNumber(event) {
+    if (displayNumber) {
+        displayNumber += event.target.textContent
+    } else {
+        displayNumber = event.target.textContent
+    }
 }
