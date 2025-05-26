@@ -22,6 +22,9 @@ function divFunc(num1, num2) {
 
 // delegates operation to proper functions
 function operate(operator, num1, num2) {
+    num1 = Number(num1);
+    num2 = Number(num2);
+    
     if (validOperators.includes(operator)) {
         switch (operator) {
             case "+":
@@ -37,9 +40,9 @@ function operate(operator, num1, num2) {
 }
 
 // UI
-let priorNumber
-let displayNumber
-let currOperator
+let priorNumber = null;
+let displayNumber = null;
+let currOperator = null;
 const operators = ["*", "/", "+", "-"]
 const display = document.querySelector(".display")
 const buttonContainer = document.querySelector(".buttons")
@@ -90,7 +93,7 @@ function handleClick(event) {
 
 // build out user's number
 function appendNumber(event) {
-    if (displayNumber) {
+    if (displayNumber !== null) {
         displayNumber += event.target.textContent
     } else {
         displayNumber = event.target.textContent
