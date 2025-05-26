@@ -17,7 +17,7 @@ function multFunc(num1, num2) {
 
 // a basic division function
 function divFunc(num1, num2) {
-    return num1 - num2
+    return num1 / num2
 }
 
 // delegates operation to proper functions
