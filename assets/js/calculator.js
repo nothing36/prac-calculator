@@ -36,3 +36,32 @@ function operate(operator, num1, num2) {
     }
 }
 
+// UI
+let currExpression = []
+const operators = ["*", "/", "+", "-"]
+const display = document.querySelector(".display")
+const buttonContainer = document.querySelector(".buttons")
+buttonContainer.addEventListener("click", handleClick);
+
+// capture button press
+function handleClick(event) {
+    if (currExpression.length == 0 && event.target.classList.contains('operator')) { return }   // stop black oper input
+    if (operators.includes(currExpression[currExpression.length - 1]) && event.target.classList.contains('operator')) { return }   // stop double oper input
+
+    // handle clear, equal and other button press
+    if (event.target.id == "btn-clear") {
+        currExpression = []
+    } else if (event.target.id == "btn-equals") {
+        evaluateExpression()
+    } else {
+        addToExpression(event.target.textContent)
+    }
+
+    // update the display
+    display.textContent = currExpression.join(" ")
+}
+
+// add next part to on screen equation calc
+function addToExpression(char) {
+    currExpression.push(char)
+}
